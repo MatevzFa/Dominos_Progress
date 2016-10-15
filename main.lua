@@ -7,10 +7,16 @@ local Dominos = LibStub('AceAddon-3.0'):GetAddon('Dominos')
 local ProgressBarModule = Dominos:NewModule('ProgressBars', 'AceEvent-3.0')
 
 function ProgressBarModule:Load()
+
 	self.bars = {
-		Addon.ExperienceBar:New('exp', { 'xp', 'reputation', 'honor' }),
-		Addon.ArtifactBar:New('artifact', { 'artifact' })
+		xpBar = Addon.ExperienceBar:New('exp', { 'xp', 'reputation', 'honor' }),
+		apBar = Addon.ArtifactBar:New('artifact', { 'artifact' })
 	}
+
+	local pLvl = UnitLevel("player")
+	if pLvl == 110 and self.bars.xpBar:GetMode() == "xp" then
+		self.bars.xpBar:SetMode("reputation", false)
+	end
 
 	-- common events
 	self:RegisterEvent('PLAYER_ENTERING_WORLD')
