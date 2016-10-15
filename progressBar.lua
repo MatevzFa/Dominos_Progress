@@ -20,6 +20,12 @@ function ProgressBar:New(id, modes, ...)
 	bar:UpdateAlwaysShowText()
 	bar:UpdateMode(true)
 
+	local pLvl = UnitLevel("player")
+	bar:SetMode("xp", false)
+	if pLvl == 110 and bar:GetMode() == "xp" then
+		bar:SetMode("reputation", false)
+	end
+
 	return bar
 end
 
@@ -203,8 +209,13 @@ end
 
 function ProgressBar:NextMode()
 	local nextIndex = self:GetModeIndex() + 1
+	local pLvl = UnitLevel("player")
 	if nextIndex > #self.modes then
-		nextIndex = 1
+		if playerLevel < 110 then
+			nextIndex = 1
+		else
+			nextIndex = 2
+		end
 	end
 
 	self:SetMode(self.modes[nextIndex])
